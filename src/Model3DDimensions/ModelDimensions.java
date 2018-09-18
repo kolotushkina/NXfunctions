@@ -1,5 +1,3 @@
-package com.kamaz.nxToolbar;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.math.BigDecimal;
