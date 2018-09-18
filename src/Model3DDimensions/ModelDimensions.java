@@ -46,24 +46,12 @@ public class ModelDimensions {
         }
         catch (NXException ex)
         {
-            if (!infoWindow.isOpen()) infoWindow.open();
-            infoWindow.writeLine("Error code: " + ex.errorCode());
-            infoWindow.writeLine("Error text: " +
-            		ufSession.UF().getFailMessage(ex.errorCode()));
+            new JOptionPane().showMessageDialog(null, "Код ошибки: " + ex.errorCode() +"\n"+           		
+            										  "Описание: " + ufSession.UF().getFailMessage(ex.errorCode()), "Ошибка", 1);
         }
         catch (Exception ex)
         {
-            if(ufSession != null)
-            {
-                StringWriter sw = new StringWriter();
-                PrintWriter pw = new PrintWriter(sw);
-                pw.println("Caught exception " + ex );
-                ex.printStackTrace(pw);
-                infoWindow.writeLine("\nFailed");
-                infoWindow.writeLine("\n"+ex.getMessage());
-                infoWindow.writeLine("\n"+sw.getBuffer().toString());
-            }
-        
+        	new JOptionPane().showMessageDialog(null, "Ошибка: " + ex.getMessage(), "Ошибка", 1);  
         
         }
     }
