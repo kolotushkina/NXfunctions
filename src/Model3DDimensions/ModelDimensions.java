@@ -1,16 +1,20 @@
+// In NX sometimes user should know dimensions of 3D model, for example he needs to count how many
+// models fit in some kind of container for transportation. You can create a framing shape around the model, then measure it 
+// dimensions with ruler tool. Here is a faster way to calculate model size. 
+
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.rmi.RemoteException;
-
 import javax.swing.JOptionPane;
 
+import nxopen.Session;
+import nxopen.SessionFactory;
+import nxopen.UFSession;
 import nxopen.BaseSession;
 import nxopen.ListingWindow;
 import nxopen.NXException;
 import nxopen.Selection;
-import nxopen.Session;
-import nxopen.SessionFactory;
-import nxopen.UFSession;
 import nxopen.UI;
 import nxopen.uf.UFConstants;
 
@@ -20,21 +24,23 @@ public class ModelDimensions {
     {
         Session theSession = null ;
         UFSession ufSession = null ;
+        Selection.SelectObjectData selectedObj = null;		
         ListingWindow infoWindow = null;
-        Selection.SelectObjectData selectedObj = null;
 
         try
         {
-        	theSession = (Session)SessionFactory.get("Session");
-        	ufSession = (UFSession)SessionFactory.get("UFSession");
+            theSession = (Session)SessionFactory.get("Session");
+            ufSession = (UFSession)SessionFactory.get("UFSession");
             infoWindow = theSession.listingWindow();
             if (!infoWindow.isOpen()) infoWindow.open();
 
-            selectedObj = select_body();
+            selectedObj = select_body();	// user should select the model whose dimensions he need to know
             while( selectedObj != null )
             {
                
                 double[] dimensions = ufSession.modlGeneral().askBoundingBox(selectedObj.object.tag());
+		    // this method returns 6 double values -  [0] - minimum x value [1] - minimum y value [2] - minimum z value [3] - maximum x value [4] - maximum y value [5] - maximum z value
+		    // based on this we can figure out size of desired box
                 infoWindow.writeLine( "Размеры выбранного объекта:" );
                 infoWindow.writeLine( " Длина объекта: " + new BigDecimal(dimensions[3]-dimensions[0]).setScale(1, RoundingMode.UP).doubleValue() + " мм");
                 infoWindow.writeLine( " Ширина объекта: " + new BigDecimal(dimensions[4]-dimensions[1]).setScale(1, RoundingMode.UP).doubleValue()+ " мм");
@@ -51,8 +57,7 @@ public class ModelDimensions {
         }
         catch (Exception ex)
         {
-        	new JOptionPane().showMessageDialog(null, "Ошибка: " + ex.getMessage(), "Ошибка", 1);  
-        
+        	new JOptionPane().showMessageDialog(null, "Ошибка: " + ex.getMessage(), "Ошибка", 1);          
         }
     }
    
