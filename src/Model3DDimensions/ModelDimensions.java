@@ -75,10 +75,5 @@ public class ModelDimensions {
         }
         else
             return null;
-    }
-    
-    public static int getUnloadOption() 
-    { 
-        return BaseSession.LibraryUnloadOption.IMMEDIATELY; 
-    }
+    }  
 }
