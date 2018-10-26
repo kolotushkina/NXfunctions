@@ -47,13 +47,12 @@ public class ModelDimensions {
                 infoWindow.writeLine( " Высота объекта: " + new BigDecimal(dimensions[5]-dimensions[2]).setScale(1, RoundingMode.UP).doubleValue()+ " мм");
                 
                 selectedObj = select_body();
-            }
-                
+            }                
         }
         catch (NXException ex)
         {
             new JOptionPane().showMessageDialog(null, "Код ошибки: " + ex.errorCode() +"\n"+           		
-            										  "Описание: " + ufSession.UF().getFailMessage(ex.errorCode()), "Ошибка", 1);
+             "Описание: " + ufSession.UF().getFailMessage(ex.errorCode()), "Ошибка", 1);
         }
         catch (Exception ex)
         {
